@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CSS3 linear-gradient-js</title>
+  <style>
+  .circle {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    mask: radial-gradient(transparent 110px, #000 110px);
+    -webkit-mask: radial-gradient(transparent 110px, #000 110px);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .circle-left {
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to bottom, #EDE604, #FFCC00, #FEAC00, #FF8100, #FF5800, #FF3BA7, #CC42A2);
+    float: left;
+  }
+
+  .circle-right {
+    width: 50%;
+    height: 100%;
+    float: right;
+    background: linear-gradient(to bottom, #9ED110, #50B517, #179067, #476EAF, #9f49ac, #CC42A2);
+  }
+
+  .circle-bottom {
+    position: absolute;
+    height: 40px;
+    width: 30px;
+    bottom: 3px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    /* 下面两个声明是补丁关键 */
+    background: linear-gradient(to right, #DB3FA3, #C443A3);
+    filter: blur(5px);
+  }
+
+  /*.circle~p {
+    width: 300px;
+    text-align: center;
+    margin-top: 2em;
+  }
+
+  .second {
+    width: 300px;
+    height: 300px;
+    line-height: 290px;
+    text-align: center;
+    font-size: 80px;
+    position: absolute;
+    margin-top: -300px;
+    pointer-events: none;
+  }
+*/
+  </style>
+</head>
+
+<body>
+  <div class="circle">
+    <div class="circle-left"></div>
+    <div class="circle-right"></div>
+    <div class="circle-bottom"></div>
+  </div>
+  <!-- <div id="seconds" class="second"></div>
+  <p>
+    <button class="ui-button ui-button-primary" onClick="fnTimeCount();">重新来一遍</button>
+  </p> -->
+</body>
+
+</html>
+<script>
+// 元素
+var eleCircle = document.getElementById('circle');
+var eleSeconds = document.getElementById('seconds');
+
+// 圆环状态还原
+var circleInit = function() {
+  eleCircle.style.clipPath = '';
+
+  eleSeconds.innerHTML = '';
+};
+
+var timerTimeCount = null;
+var fnTimeCount = function(seconds) {
+  if (timerTimeCount) {
+    return;
+  }
+  // 倒计时方法
+  var seconds = seconds || 10;
+
+  var step = function() {
+    // 圆环匹配
+    var percent = seconds / 10;
+
+    // clip-path严格来讲是个扇形
+    // 但polygon只能连接直线，因此，这个扇形半径就要处理的足够大，例如，500这样子
+    // 于是有公式
+    // x=a+rcosθ
+    // y=b+rsinθ
+    var a = 150,
+      b = 150,
+      r = 500;
+    var angle = Math.PI / 180 * (360 * percent - 90);
+    var x = a + r * Math.cos(angle);
+    var y = b + r * Math.sin(angle);
+
+    // 总共7个点
+    var p1 = p2 = p3 = p4 = p5 = p6 = p7 = [a, b];
+
+    if (x < a) {
+      p2 = [a, b - r];
+      p3 = [a + r, b - r];
+      p4 = [a + r, b + r];
+      p5 = [a, b + r];
+      p6 = [a - r, b];
+      p7 = [x, y];
+      if (y > b) {
+        p6 = p7;
+      }
+    } else {
+      p2 = [a, b - r];
+      p3 = [a + r, b - r];
+      p4 = [a + r, b];
+      p5 = [x, y];
+      p6 = p5;
+      p7 = p5;
+      if (y < b) {
+        p4 = [x, y];
+      }
+    }
+    eleCircle.style.clipPath = 'polygon(' + (function() {
+      return [p1, p2, p3, p4, p5, p6, p7].map(function(arr) {
+        return arr.map(function(pos) {
+          return pos + 'px';
+        }).join(' ');
+      }).join();
+    })() + ')';
+
+    eleSeconds.innerHTML = seconds;
+
+    seconds--;
+
+    if (seconds < 0) {
+      clearInterval(timerTimeCount);
+      timerTimeCount = null;
+      // 显示弹框
+      alert('时间到！');
+      // 圆环状态还原
+      circleInit();
+    }
+  };
+
+  step();
+
+  timerTimeCount = setInterval(step, 1000);
+};
+
+fnTimeCount();
+console.log("原地址：http://www.zhangxinxu.com/study/201711/colorful-circle-by-css-linear-gradient.html")
+</script>

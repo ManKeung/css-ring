@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>12个30°</title>
+  <style>
+  .circle {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    transition: clip-path .2s;
+    -webkit-mask: radial-gradient(transparent, transparent 110px, #000 110px);
+    mask: radial-gradient(transparent 110px, #000 110px);
+  }
+
+  .circle-group {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    -webkit-filter: blur(15px);
+    filter: blur(15px);
+    transform: scale(1.2);
+  }
+
+  .circle-group i {
+    width: 100%;
+    height: 100%;
+    clip: rect(0 300px 300px 150px);
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .circle-group i::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: currentColor;
+    position: absolute;
+    clip: rect(0 150px 300px 0);
+    transform: rotate(31deg);
+    border-radius: 50%;
+  }
+
+  .circle-group i:nth-of-type(1) {
+    transform: rotate(0);
+    color: #9ED110;
+  }
+
+  .circle-group i:nth-of-type(2) {
+    transform: rotate(30deg);
+    color: #50B517;
+  }
+
+  .circle-group i:nth-of-type(3) {
+    transform: rotate(60deg);
+    color: #179067;
+  }
+
+  .circle-group i:nth-of-type(4) {
+    transform: rotate(90deg);
+    color: #476EAF;
+  }
+
+  .circle-group i:nth-of-type(5) {
+    transform: rotate(120deg);
+    color: #9f49ac;
+  }
+
+  .circle-group i:nth-of-type(6) {
+    transform: rotate(150deg);
+    color: #CC42A2;
+  }
+
+  .circle-group i:nth-of-type(7) {
+    transform: rotate(180deg);
+    color: #FF3BA7;
+  }
+
+  .circle-group i:nth-of-type(8) {
+    transform: rotate(210deg);
+    color: #FF5800;
+  }
+
+  .circle-group i:nth-of-type(9) {
+    transform: rotate(240deg);
+    color: #FF8100;
+  }
+
+  .circle-group i:nth-of-type(10) {
+    transform: rotate(270deg);
+    color: #FEAC00;
+  }
+
+  .circle-group i:nth-of-type(11) {
+    transform: rotate(300deg);
+    color: #FFCC00;
+  }
+
+  .circle-group i:nth-of-type(12) {
+    transform: rotate(330deg);
+    color: #EDE604;
+  }
+
+  </style>
+</head>
+
+<body>
+  <div id="circle" class="circle">
+    <div class="circle-group">
+      <i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i>
+    </div>
+  </div>
+</body>
+
+</html>

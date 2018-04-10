@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>12个30°-js</title>
+  <style>
+  .circle {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    transition: clip-path .2s;
+    -webkit-mask: radial-gradient(transparent, transparent 110px, #000 110px);
+    mask: radial-gradient(transparent 110px, #000 110px);
+  }
+
+  .circle-group {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    -webkit-filter: blur(15px);
+    filter: blur(15px);
+    transform: scale(1.2);
+  }
+
+  .circle-group i {
+    width: 100%;
+    height: 100%;
+    clip: rect(0 300px 300px 150px);
+    position: absolute;
+    overflow: hidden;
+  }
+
+  .circle-group i::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background: currentColor;
+    position: absolute;
+    clip: rect(0 150px 300px 0);
+    transform: rotate(31deg);
+    border-radius: 50%;
+  }
+
+  .circle-group i:nth-of-type(1) {
+    transform: rotate(0);
+    color: #9ED110;
+  }
+
+  .circle-group i:nth-of-type(2) {
+    transform: rotate(30deg);
+    color: #50B517;
+  }
+
+  .circle-group i:nth-of-type(3) {
+    transform: rotate(60deg);
+    color: #179067;
+  }
+
+  .circle-group i:nth-of-type(4) {
+    transform: rotate(90deg);
+    color: #476EAF;
+  }
+
+  .circle-group i:nth-of-type(5) {
+    transform: rotate(120deg);
+    color: #9f49ac;
+  }
+
+  .circle-group i:nth-of-type(6) {
+    transform: rotate(150deg);
+    color: #CC42A2;
+  }
+
+  .circle-group i:nth-of-type(7) {
+    transform: rotate(180deg);
+    color: #FF3BA7;
+  }
+
+  .circle-group i:nth-of-type(8) {
+    transform: rotate(210deg);
+    color: #FF5800;
+  }
+
+  .circle-group i:nth-of-type(9) {
+    transform: rotate(240deg);
+    color: #FF8100;
+  }
+
+  .circle-group i:nth-of-type(10) {
+    transform: rotate(270deg);
+    color: #FEAC00;
+  }
+
+  .circle-group i:nth-of-type(11) {
+    transform: rotate(300deg);
+    color: #FFCC00;
+  }
+
+  .circle-group i:nth-of-type(12) {
+    transform: rotate(330deg);
+    color: #EDE604;
+  }
+
+  </style>
+</head>
+
+<body>
+  <div id="circle" class="circle">
+    <div class="circle-group">
+      <i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i>
+      <i></i><i></i><i></i><i></i>
+    </div>
+  </div>
+</body>
+
+</html>
+<script>
+// 元素
+var eleCircle = document.getElementById('circle');
+var eleSeconds = document.getElementById('seconds');
+
+// 圆环状态还原
+var circleInit = function() {
+  eleCircle.style.clipPath = '';
+
+  eleSeconds.innerHTML = '';
+};
+
+var timerTimeCount = null;
+var fnTimeCount = function(seconds) {
+  if (timerTimeCount) {
+    return;
+  }
+  // 倒计时方法
+  var seconds = seconds || 10;
+
+  var step = function() {
+    // 圆环匹配
+    var percent = seconds / 10;
+
+    // clip-path严格来讲是个扇形
+    // 但polygon只能连接直线，因此，这个扇形半径就要处理的足够大，例如，500这样子
+    // 于是有公式
+    // x=a+rcosθ
+    // y=b+rsinθ
+    var a = 150,
+      b = 150,
+      r = 500;
+    var angle = Math.PI / 180 * (360 * percent - 90);
+    var x = a + r * Math.cos(angle);
+    var y = b + r * Math.sin(angle);
+
+    // 总共7个点
+    var p1 = p2 = p3 = p4 = p5 = p6 = p7 = [a, b];
+
+    if (x < a) {
+      p2 = [a, b - r];
+      p3 = [a + r, b - r];
+      p4 = [a + r, b + r];
+      p5 = [a, b + r];
+      p6 = [a - r, b];
+      p7 = [x, y];
+      if (y > b) {
+        p6 = p7;
+      }
+    } else {
+      p2 = [a, b - r];
+      p3 = [a + r, b - r];
+      p4 = [a + r, b];
+      p5 = [x, y];
+      p6 = p5;
+      p7 = p5;
+      if (y < b) {
+        p4 = [x, y];
+      }
+    }
+    eleCircle.style.clipPath = 'polygon(' + (function() {
+      return [p1, p2, p3, p4, p5, p6, p7].map(function(arr) {
+        return arr.map(function(pos) {
+          return pos + 'px';
+        }).join(' ');
+      }).join();
+    })() + ')';
+
+    eleSeconds.innerHTML = seconds;
+
+    seconds--;
+
+    if (seconds < 0) {
+      clearInterval(timerTimeCount);
+      timerTimeCount = null;
+      // 显示弹框
+      alert('时间到！');
+      // 圆环状态还原
+      circleInit();
+    }
+  };
+
+  step();
+
+  timerTimeCount = setInterval(step, 1000);
+};
+
+fnTimeCount();
+
+console.log('原地址：http://www.zhangxinxu.com/study/201711/colorful-circle-by-css-background-clip-filter-blur.html')
+
+</script>

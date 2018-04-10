@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>CSS3 linear-gradient</title>
+  <style>
+  .circle {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    mask: radial-gradient(transparent 110px, #000 110px);
+    -webkit-mask: radial-gradient(transparent 110px, #000 110px);
+    overflow: hidden;
+  }
+
+  .circle-left {
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to bottom, #EDE604, #FFCC00, #FEAC00, #FF8100, #FF5800, #FF3BA7, #CC42A2);
+    float: left;
+  }
+
+  .circle-right {
+    width: 50%;
+    height: 100%;
+    float: right;
+    background: linear-gradient(to bottom, #9ED110, #50B517, #179067, #476EAF, #9f49ac, #CC42A2);
+  }
+
+  </style>
+</head>
+
+<body>
+  <div class="circle">
+    <div class="circle-left"></div>
+    <div class="circle-right"></div>
+  </div>
+</body>
+
+</html>
